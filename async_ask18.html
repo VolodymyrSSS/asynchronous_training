@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask18</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 70%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Посмотрите на код ниже, проанализируйте его.<br>
+      Что будет вызвано раньше и что будет выведено в консоль?<br>
+      А как сделать наоборот, покажите решение.
+    </h4>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        'use strict';<br>
+      <br>
+      let promise = new Promise((resolve, reject) => {<br>
+      <br>
+        setTimeout(() => reject(new Error("error")), 1000);<br>
+        setTimeout(() => resolve("ignored"), 2000);<br>
+      });<br>
+      <br>
+      promise<br>
+        .then(<br>
+          result => console.log("Fulfilled: " + result),<br>
+          error => console.log("Rejected: " + error)<br>
+        );<br>
+        </code>
+    </p>
+    <br>
+
+    <script>
+      'use strict';
+
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => reject(new Error("error")), 1000);
+        setTimeout(() => resolve("ignored"), 2000);
+      });
+      
+      promise
+        .then(
+          result => console.log("Fulfilled: " + result),
+          error => console.log("Rejected: " + error)
+        );
+    </script>
+
+    <p><b>Ответ:</b></p>
+
+    <p>Первое что необходимо сказать, после вызова resolve/reject промис уже не может «передумать».<br>
+      Когда промис переходит в состояние «выполнен» – с результатом (resolve) или ошибкой (reject) – 
+      это навсегда.
+    </p>
+    
+    <p>Поэтому, в результате вызова этого кода сработает только первый обработчик then, так как после 
+      вызова reject промис уже получил состояние (с ошибкой), и в дальнейшем его уже ничто не изменит.
+      Последующие вызовы resolve/reject будут просто проигнорированы.
+      Поэтому, через 1 секунду готов результат: error и в консоль первым будет выведен 'Rejected: error'<br>
+      через 2 секунды — resolve с ignored, он будет проигнорирован.
+    </p>
+
+    <p>А так – наоборот, 'resolve' будет раньше:</p>
+    <br>
+
+
+    <p class="code-ex">
+      <code>
+        'use strict';<br>
+        <br>
+        let promise = new Promise((resolve, reject) => {<br>
+          // через 1 секунду готов результат: result<br>
+          setTimeout(() => resolve('result'), 1000);<br>
+          // через 2 секунды — reject с ошибкой, он будет проигнорирован<br>
+          setTimeout(() => reject(new Error('ignored')), 2000);<br>
+        });<br>
+        <br>
+        promise<br>
+          .then(<br>
+            result => console.log("Fulfilled: " + result), // сработает<br>
+            error => console.log("Rejected: " + error) // не сработает<br>
+          );<br>
+        </code>
+    </p>
+    <br>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask6</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 50%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 50%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Функция 'sayHi' выводит фразу 'Привет' в консоль.<br>
+         Надо вывести эту фразу через 1,5 секунды после запуска этой функции</h4>
+
+    <script>
+        function sayHi() {
+            console.log("Привет");
+          }
+    </script>
+
+    <p class="code-ex">
+        <code>
+        function sayHi() {<br>
+            console.log('Привет');<br>
+          }<br>
+        </code>
+    </p>
+
+    <br>
+    <p>
+        <b>Ответ:</b> Для этого используем метод 'setTimeout' где первым аргументом укажем название 
+        функции,а вторым - нужную задержку в милисекундах.
+        При этом следует заметить, что если добавить скобки после функции, то это не работает, 
+        потому что setTimeout ожидает ссылку на функцию. Здесь sayHi() запускает выполнение 
+        функции, и результат выполнения отправляется в setTimeout. В нашем случае результатом 
+        выполнения sayHi() является undefined (так как функция ничего не возвращает), поэтому 
+        ничего не планируется.
+    </p>
+    <br>
+
+    <p class="code-ex">
+        <code>
+            function sayHi() {<br>
+                console.log('Привет');<br>
+            }<br>
+            <br>
+            <b>setTimeout(sayHi, 1500);</b> // Привет
+        </code>
+    </p>
+
+    <script>
+        setTimeout(sayHi, 1500); // Привет
+    </script>
+    <br>
+
+    <p>При этом, если первый аргумент является строкой, то JavaScript создаст из неё функцию.<br>
+        Это также будет работать (здесь сделали задержку 2 секунды):
+    </p>
+    <br>
+
+    <script>
+        setTimeout("console.log('Привет')", 2000); // Привет
+    </script>
+        
+    <p class="code-ex">
+        <code>
+            function sayHi() {<br>
+                console.log('Привет');<br>
+                }<br>
+            <br>
+            <b>setTimeout("console.log('Привет')", 2000);</b> // Привет
+        </code>
+    </p>
+    <br>
+
+    <p>Но использование строк не рекомендуется. Вместо этого используйте функции. Например, так:</p>
+    <br>
+
+    <script>
+        setTimeout(() => console.log('Привет'), 2500);
+    </script>
+
+    <p class="code-ex">
+        <code>
+            function sayHi() {<br>
+                console.log('Привет');<br>
+                }<br>
+            <br>
+            <b>setTimeout(() => console.log('Привет'), 2500);</b> // Привет
+        </code>
+    </p>
+
+</body>
+
+</html>

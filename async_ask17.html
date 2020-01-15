@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask17</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 70%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">1. Создайте объект promise;<br>
+      2. Переведите promise в состояние fulfilled с результатом 'some result' при этом<br>
+      3. Используя 'setTimeout' в качестве асинхронной операции, вывести через 1 секунду в консоле 
+      успешно-завершившуюся операцию «Fulfilled: result»;<br>
+      4. Покажите код если промис завершится с ошибкой;
+    </h4>
+    <br>
+
+    <p><b>Решение:</b></p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        'use strict';<br>
+      <br>
+      // Создадим объект promise с помощью конструктора promis:<br>
+      let promise = new Promise((resolve, reject) => {<br>
+      <br>
+      setTimeout(() => {<br>
+        // переведёт промис в состояние fulfilled с результатом 'some result'<br>
+        resolve('some result');<br>
+        }, 1000);<br>
+      });<br>
+      <br>
+      // Используя promise.then навешиваем обработчики на успешный результат или ошибку<br>
+      promise<br>
+        .then(<br>
+          result => {<br>
+            // первая функция-обработчик - запустится при вызове resolve<br>
+            console.log("Fulfilled: " + result); // some result - аргумент resolve<br>
+          },<br>
+          error => {<br>
+            // вторая функция - запустится при вызове reject<br>
+            console.log("Rejected: " + error); // error - аргумент reject<br>
+          }<br>
+        );<br>
+        </code>
+    </p>
+    <br>
+
+    <script>
+      'use strict';
+
+      // Создаётся объект promise
+      let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // переведёт промис в состояние fulfilled с результатом 'some result'
+          resolve("some result");
+        }, 1000);
+      });
+
+      // promise.then навешивает обработчики на успешный результат или ошибку
+      promise
+        .then(
+          result => {
+            // первая функция-обработчик - запустится при вызове resolve
+            console.log("Fulfilled: " + result); // some result - аргумент resolve
+          },
+          error => {
+            // вторая функция - запустится при вызове reject
+            console.log("Rejected: " + error); // error - аргумент reject
+          }
+        );
+    </script>
+
+    <p>А если бы в 'setTimeout' вместо resolve('result') был вызов reject('error'), то вывелось бы 
+      «Rejected: error».<br>
+      Впрочем, как правило, если при выполнении возникла проблема, то reject вызывают не со строкой, 
+      а с объектом ошибки типа <em>new Error</em>:
+    </p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        'use strict';<br>
+      <br>
+      // Этот promise завершится с ошибкой через 1 секунду<br>
+      var promise = new Promise((resolve, reject) => {<br>
+      <br>
+      setTimeout(() => {<br>
+          <b>reject(new Error("время вышло!"))</b>;<br>
+        }, 1000);<br>
+      });<br>
+      <br>
+      promise<br>
+        .then(<br>
+          result => console.log("Fulfilled: " + result),<br>
+          error => console.log("Rejected: " + error.message) // Rejected: время вышло!<br>
+        );<br>
+        </code>
+    </p>
+    <br>
+
+    <p>Конечно, вместо setTimeout внутри функции промиса может быть и запрос к серверу и ожидание 
+      ввода пользователя, или другой асинхронный процесс. Главное, чтобы по своему завершению он 
+      вызвал resolve или reject, которые передадут результат обработчикам.
+    </p>
+
+    
+</body>
+
+</html>

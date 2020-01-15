@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask20</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 70%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Напишите код где по очереди выполняется:<br>
+      1. Загрузить данные посетителя с сервера (асинхронно).<br>
+      2. Затем отправить запрос о нём на github (асинхронно).<br>
+      3. Когда это будет готово, вывести его github-аватар на экран (асинхронно).<br>
+      …И сделать код расширяемым, чтобы цепочку можно было легко продолжить.<br>
+    </h4>
+    <br>
+
+  <p class="code-ex">
+    <code>
+      'use strict';<br>
+      <br>
+      function httpGet(url) {<br>
+        <br>
+        return new Promise(function(resolve, reject) {<br>
+          <br>
+          var xhr = new XMLHttpRequest();<br>
+          xhr.open('GET', url, true);<br>
+          <br>
+          xhr.onload = function() {<br>
+            if (this.status == 200) {<br>
+              resolve(this.response);<br>
+            } else {<br>
+              var error = new Error(this.statusText);<br>
+              error.code = this.status;<br>
+              reject(error);<br>
+            }<br>
+          };<br>
+          <br>
+          xhr.onerror = function() {<br>
+            reject(new Error("Network Error"));<br>
+          };<br>
+          xhr.send();<br>
+        });<br>
+      }<br>
+      <br>
+    // сделать запрос<br>
+    httpGet('/article/promise/user.json')<br>
+    <br>
+      // 1. Получить данные о пользователе в JSON и передать дальше<br>
+      .then(response => {<br>
+        console.log(response);<br>
+        let user = JSON.parse(response);<br>
+        return user;<br>
+      })<br>
+      // 2. Получить информацию с github<br>
+      .then(user => {<br>
+        console.log(user);<br>
+        return httpGet(`https://api.github.com/users/${user.name}`);<br>
+      })<br>
+      // 3. Вывести аватар на 3 секунды (можно с анимацией)<br>
+      .then(githubUser => {<br>
+        console.log(githubUser);<br>
+        githubUser = JSON.parse(githubUser);<br>
+        <br>
+        let img = new Image();<br>
+        img.src = githubUser.avatar_url;<br>
+        img.className = "promise-avatar-example";<br>
+        document.body.appendChild(img);<br>
+        <br>
+        setTimeout(() => img.remove(), 3000); // <br>
+      });<br>
+      <br>
+      // Использование:<br>
+      httpGet("/article/promise/user.json")<br>
+      .then(<br>
+        response => alert(`Fulfilled: ${response}`),<br>
+        error => alert(`Rejected: ${error}`)<br>
+      );<br>
+      </code>
+  </p>
+  <br>
+
+  <script>
+    'use strict';
+
+    function httpGet(url) {
+
+      return new Promise(function(resolve, reject) {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+
+        xhr.onload = function() {
+          if (this.status == 200) {
+            resolve(this.response);
+          } else {
+            var error = new Error(this.statusText);
+            error.code = this.status;
+            reject(error);
+          }
+        };
+
+        xhr.onerror = function() {
+          reject(new Error("Network Error"));
+        };
+        xhr.send();
+      });
+    }
+
+
+    // сделать запрос
+    httpGet('/article/promise/user.json')
+
+      // 1. Получить данные о пользователе в JSON и передать дальше
+      .then(response => {
+        console.log(response);
+        let user = JSON.parse(response);
+        return user;
+      })
+
+      // 2. Получить информацию с github
+      .then(user => {
+        console.log(user);
+        return httpGet(`https://api.github.com/users/${user.name}`);
+      })
+      
+      // 3. Вывести аватар на 3 секунды (можно с анимацией)
+      .then(githubUser => {
+        console.log(githubUser);
+        githubUser = JSON.parse(githubUser);
+
+        let img = new Image();
+        img.src = githubUser.avatar_url;
+        img.className = "promise-avatar-example";
+        document.body.appendChild(img);
+
+        setTimeout(() => img.remove(), 3000); // (*)
+      });
+
+      // Использование:
+      httpGet("/article/promise/user.json")
+      .then(
+        response => alert(`Fulfilled: ${response}`),
+        error => alert(`Rejected: ${error}`)
+      );
+      
+  </script>
+
+  <p><b>Ответ:</b>Как видно, внутри функции объект XMLHttpRequest создаётся и отсылается как 
+    обычно, при onload/onerror вызываются, соответственно, resolve (при статусе 200) или reject.<br>
+    <br>
+    Самое главное в этом коде – последовательность вызовов:<br>
+    httpGet(...)<br>
+    .then(...)<br>
+    .then(...)<br>
+    .then(...)<br>
+  </p>
+
+  <p>Заметим, что ряд современных браузеров уже поддерживает fetch – новый встроенный метод для 
+    AJAX-запросов, призванный заменить XMLHttpRequest. Он гораздо мощнее, чем httpGet. И – да, 
+    этот метод использует промисы. Полифил для него доступен на https://github.com/github/fetch.
+  </p>
+        
+</body>
+
+</html>

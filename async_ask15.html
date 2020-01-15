@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask15</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 70%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 70%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Напишите код для двух объектов promise:<br>
+      1. Первый - для успешно выполненного промиса c результатом: 'done!';<br>
+      2. Второй - для промиса в случае ошибки и результатом: 'Error: Whoops!'<br>
+      А какая особенность кода будет если мы заинтересованы только в результате успешного выполнения задачи?
+    </h4>
+    <br>
+
+    <p><b>Решение:</b></p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        'use strict';<br>
+        <br>
+        // создаём 1й промис
+        let promise1 = new Promise(function(resolve, reject) {<br>
+          // задаём функцию для успешного выполнения промиса
+          setTimeout(() => <b>resolve("done!"), 1000);</b><br>
+        });<br>
+        <br>
+      // навешиваем метод .then для выполнения функции-исполнения
+      promise.then(<br>
+        // resolve запустит первую функцию, переданную в .then<br>
+        result => console.log(result), // выведет "done!" через одну секунду<br>
+        // этот .then не будет запущен так как промис уже получил статус 'resolve'<br>
+        error => console.log(error)<br>
+      );<br>
+        </code>
+    </p>
+    <br>
+
+    
+
+    <script>
+      'use strict';
+
+      let promise1 = new Promise(function(resolve, reject) {
+          setTimeout(() => resolve("done!"), 1000);
+        });
+        
+        // resolve запустит первую функцию, переданную в .then
+      promise1.then(
+        result => console.log(result), // выведет "done!" через одну секунду
+        error => console.log(error) // не будет запущена
+      );
+    </script>
+
+    <p>В случае ошибки выполнится вторая функция-исполнитель:</p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        let promise = new Promise(function(resolve, reject) {<br>
+          setTimeout(() => <b>reject(new Error("Whoops!")), 1000);</b><br>
+        });<br>
+        <br>
+        promise.then(<br>
+          result => console.log(result), // не будет запущена<br>
+          // reject запустит вторую функцию, переданную в .then<br>
+          error => console.log(error) // выведет "Error: Whoops!" спустя одну секунду<br>
+        );<br>
+        </code>
+    </p>
+    <br>
+
+    <script>
+      let promise2 = new Promise(function(resolve, reject) {
+        setTimeout(() => reject(new Error("Whoops!")), 1000);
+      });
+
+      // reject запустит вторую функцию, переданную в .then
+      promise2.then(
+        result => console.log(result), // не будет запущена
+        error => console.log(error) // выведет "Error: Whoops!" спустя одну секунду
+      );
+    </script>
+
+    <p>Конечно, вместо setTimeout внутри функции промиса может быть и запрос к серверу и ожидание 
+      ввода пользователя, или другой асинхронный процесс. Главное, чтобы по своему завершению он 
+      вызвал resolve или reject, которые передадут результат обработчикам.
+    </p>
+    <br>
+
+    <p>А теперь рассмотрим особенность если мы заинтересованы только в результате успешного выполнения 
+      задачи, а для этого в then можно передать только одну функцию:
+    </p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        let promise = new Promise(resolve => {<br>
+          setTimeout(() => resolve("I am always done!"), 2000);<br>
+        });<br>
+        <br>
+        promise.then(alert); // выведет на экране "I am always done!" спустя две секунды<br>
+        </code>
+    </p>
+    <br>
+
+    <script>
+      let promise3 = new Promise(resolve => {
+        setTimeout(() => resolve("I am always done!"), 2000);
+      });
+
+      promise3.then(alert); // выведет на экране "I am always done!" спустя две секунды
+    </script>
+
+
+
+    
+</body>
+
+</html>

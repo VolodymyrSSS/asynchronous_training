@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask13</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 50%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">В приведённом ниже коде запланирован вызов setTimeout, а затем выполняется 
+        сложное вычисление, для завершения которого требуется более 100 мс.<br>
+        Когда будет выполнена запланированная функция?<br>
+        1. Перед циклом; 2. В начале цикла; 3. После цикла.<br>
+        Что покажет console.log?</h4>
+    <br>
+
+    <p class="code-ex">
+        <code>
+            let i = 0;<br>
+            <br>
+            setTimeout(() => console.log(i), 100); // ?<br>
+            <br>
+            // предположим, что время выполнения этой функции >100 мс<br>
+            for(let j = 0; j < 100000000; j++) {<br>
+              i++;<br>
+            }<br>
+        </code>
+    </p>
+    <br>
+
+    <p>
+        Вариант1:<br>
+        <b>Перед циклом.</b><br>
+        Ответ: <b>no</b>: Любой вызов setTimeout будет выполнен только после того, как текущий код завершится.<br>
+        <br>
+
+        Вариант2:<br>
+        <b>В начале цикла.</b><br>
+        Ответ: <b>no</b>: Любой вызов setTimeout будет выполнен только после того, как текущий код завершится.<br>
+        <br>
+
+        Вариант3:<br>
+        <b>После цикла.</b><br>
+        Ответ: <b>yes</b>: Любой вызов setTimeout будет выполнен только после того, как текущий код завершится.<br>
+        <br>
+    </p>
+    <br>
+
+    <script>
+        let i = 0;
+
+        setTimeout(() => console.log(i), 100); // 100000000
+
+        // предположим, что время выполнения этой функции >100 мс
+        for(let j = 0; j < 100000000; j++) {
+            i++;
+        }
+    </script>
+
+    <p>Последним значением i будет: 100000000.</p>
+
+    
+</body>
+
+</html>

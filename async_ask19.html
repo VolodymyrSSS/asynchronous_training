@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask19</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 60%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 85px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .message-ball {
+      font-size: 20px;
+      line-height: 200px;
+      text-align: center;
+    }
+
+    .circle {
+      transition-property: width, height, margin-left, margin-top;
+      transition-duration: 2s;
+      position: fixed;
+      transform: translateX(-50%) translateY(-50%);
+      background-color: red;
+      border-radius: 50%;
+    }
+    </style>
+</head>
+<body>
+
+  <h2 class="title">Асинхронный код, задача</h2>
+
+  <h4 class="task">Анимация круга с помощью промиса<br>
+    Перепишите функцию showCircle, написанную в задании Анимация круга с помощью колбэка таким образом, 
+    чтобы она возвращала промис, вместо того чтобы принимать в аргументы функцию-callback.<br>
+    Используйте за основу код ниже:
+  </h4>
+  <br>
+
+  <p class="code-ex">Новое использование:<br>
+    <code>
+      showCircle(120, 120, 100).then(div => {<br>
+        div.classList.add('message-ball');<br>
+        div.append("Hello, world!");<br>
+      });<br>
+      </code>
+  </p>
+  <br>
+
+  <button onclick="go1()">Click me (callback)</button>
+
+  <p class="code-ex">Использование callback:<br>
+    <code>
+      function go1() {<br>
+        showCircle1(120, 120, 100, div => {<br>
+          div.classList.add('message-ball');<br>
+          div.append("Hello, world!");});<br>
+      }<br>
+      <br>
+      function showCircle1(cx, cy, radius, callback) {<br>
+        let div = document.createElement('div');<br>
+        div.style.width = 0;<br>
+        div.style.height = 0;<br>
+        div.style.left = cx + 'px';<br>
+        div.style.top = cy + 'px';<br>
+        div.className = 'circle';<br>
+        document.body.append(div);<br>
+        <br>
+        setTimeout(() => {<br>
+          div.style.width = radius * 2 + 'px';<br>
+          div.style.height = radius * 2 + 'px';<br>
+          <br>
+          div.addEventListener('transitionend', function handler() {<br>
+            div.removeEventListener('transitionend', handler);<br>
+            callback(div);});<br>
+        });<br>
+      }<br>
+      </code>
+  </p>
+  <br>
+      
+  <script>
+    function go1() {
+      showCircle1(120, 120, 100, div => {
+        div.classList.add('message-ball');
+        div.append("Hello, world!");
+      });
+    }
+
+    function showCircle1(cx, cy, radius, callback) {
+      let div = document.createElement('div');
+      div.style.width = 0;
+      div.style.height = 0;
+      div.style.left = cx + 'px';
+      div.style.top = cy + 'px';
+      div.className = 'circle';
+      document.body.append(div);
+
+      setTimeout(() => {
+        div.style.width = radius * 2 + 'px';
+        div.style.height = radius * 2 + 'px';
+
+        div.addEventListener('transitionend', function handler() {
+          div.removeEventListener('transitionend', handler);
+          callback(div);
+        });
+      });
+    }
+  </script>
+  <br>
+  <br>
+
+  <p><b>Решение:</b></p>
+
+  <button onclick="go2()">Нажми меня(promise)</button>
+
+  <p class="code-ex">Использование promise:<br>
+    <code>
+      function go2() {<br>
+        showCircle2(150, 550, 100).then(div => {<br>
+          div.classList.add('message-ball');<br>
+          div.append("Hello, world!");});<br>
+      }<br>
+      <br>
+      function showCircle2(cx, cy, radius) {<br>
+        let div = document.createElement('div');<br>
+        div.style.width = 0;<br>
+        div.style.height = 0;<br>
+        div.style.left = cx + 'px';<br>
+        div.style.top = cy + 'px';<br>
+        div.className = 'circle';<br>
+        document.body.append(div);<br>
+    
+        return new Promise(resolve => {<br>
+          setTimeout(() => {<br>
+            div.style.width = radius * 2 + 'px';<br>
+            div.style.height = radius * 2 + 'px';<br>
+            <br>
+            div.addEventListener('transitionend', function handler() {<br>
+              div.removeEventListener('transitionend', handler);<br>
+              resolve(div);});<br>
+          }, 0);<br>
+        })<br>
+      }<br>
+      </code>
+  </p>
+  <br>
+
+  <script>
+    
+  function go2() {
+    showCircle2(150, 550, 100).then(div => {
+      div.classList.add('message-ball');
+      div.append("Hello, world!");
+    });
+  }
+
+  function showCircle2(cx, cy, radius) {
+    let div = document.createElement('div');
+    div.style.width = 0;
+    div.style.height = 0;
+    div.style.left = cx + 'px';
+    div.style.top = cy + 'px';
+    div.className = 'circle';
+    document.body.append(div);
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        div.style.width = radius * 2 + 'px';
+        div.style.height = radius * 2 + 'px';
+
+        div.addEventListener('transitionend', function handler() {
+          div.removeEventListener('transitionend', handler);
+          resolve(div);
+        });
+      }, 0);
+    })
+  }
+  </script>
+
+
+        
+
+
+    
+</body>
+
+</html>

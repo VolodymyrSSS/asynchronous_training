@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask11</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 50%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 60%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Используя рекурсивный метод setTimeout и setTimeout с нулевой задержкой,
+        показать на экране (через alert) какова реальная задержка между вызовами ?</h4>
+    <br>
+
+    <p class="code-ex">
+        <code>
+            let start = Date.now();<br>
+            let times = [];<br>
+            <br>
+            setTimeout(function run() {<br>
+            times.push(Date.now() - start);<br>
+            <br>
+            if (start + 100 < Date.now()) alert(times);<br>
+            else setTimeout(run);<br>
+            });<br>
+        </code>
+    </p>
+    <br>
+
+    <p>
+        <b>Ответ:</b> В браузере есть ограничение на то, как часто внутренние счётчики могут выполняться.<br> 
+        Здесь вызов setTimeout повторно вызывает себя через 0 мс. Каждый вызов запоминает реальное время 
+        от предыдущего вызова в массиве times.<br>
+        Первый таймер запускается сразу (как и указано в спецификации), а затем задержка вступает в игру, 
+        и мы видим 3,4,6,7,14....<br>
+        Аналогичное происходит при использовании setInterval вместо setTimeout: setInterval(f) запускает f 
+        несколько раз с нулевой задержкой, а затем с задержкой 4+ мс.<br>
+        Это ограничение существует давно, многие скрипты полагаются на него, поэтому оно сохраняется по 
+        историческим причинам.
+    </p>
+    <br>
+
+    <p class="code-ex">
+        <code>
+            let start = Date.now();<br>
+            let times = [];<br>
+            <br>
+            setTimeout(function run() {<br>
+            times.push(Date.now() - start); // запоминаем задержку от предыдущего вызова<br>
+            <br>
+            if (start + 100 < Date.now()) alert(times); // показываем задержку через 100 мс<br>
+            else setTimeout(run); // если нужно ещё запланировать<br>
+            });<br>
+            <br>
+            // пример вывода:<br>
+            // 3,4,6,7,14,21,25,30,34,39,43,48,52,57,61,67,72,77,83,88,93,98,104<br>
+        </code>
+    </p>
+    <br>
+
+    <script>
+        let start = Date.now();
+        let times = [];
+
+        setTimeout(function run() {
+          times.push(Date.now() - start); // запоминаем задержку от предыдущего вызова
+
+          if (start + 100 < Date.now()) alert(times); // показываем задержку через 100 мс
+          else setTimeout(run); // если нужно ещё запланировать
+        });
+    </script>
+
+    <p>Это ограничение относится только к браузерам.</p>
+
+    
+</body>
+
+</html>

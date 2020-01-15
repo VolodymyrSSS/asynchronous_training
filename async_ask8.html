@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask8</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 50%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 55%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Что будет в браузере идентификатором таймера ?<br>
+        А примит идентификатором таймера значение null после его отмены ?
+    </h4>
+    <br>
+
+    <script>
+        let timerId = setTimeout(() => console.log("ничего не происходит"), 1500);
+        console.log(timerId); // 1
+
+        clearTimeout(timerId);
+        console.log(timerId); // тот же идентификатор (не принимает значение null после отмены)
+    </script>
+
+    <p class="code-ex">
+        <code>
+            let timerId = setTimeout(() => console.log("ничего не происходит"), 1500);<br>
+            <br>
+            clearTimeout(timerId);<br>
+        </code>
+    </p>
+
+    <br>
+    <p>
+        <b>Ответ:</b> Для этого, зададим идентификатор таймера в переменную и выведем её в консоли.<br>
+        Как мы видим, в браузере идентификатором таймера является число.<br>
+        Потом, отменим таймер с помощью метода <b>clearTimeout()</b> задав аргументом 
+    </p>
+    <br>
+
+    <p class="code-ex" width="65%">
+        <code>
+            let timerId = setTimeout(() => console.log("ничего не происходит"), 1500);<br>
+            console.log(timerId); // идентификатор таймера - у нас это число 1<br>
+            <br>
+            <b>clearTimeout(timerId);</b><br>
+            console.log(timerId); // число 1 - тот же идентификатор (не принимает значение null после отмены);
+        </code>
+    </p>
+    <br>
+
+    <p>В других средах идентификатором таймера может быть что-то ещё. Например, Node.js возвращает 
+        объект таймера с дополнительными методами.
+    </p>
+
+</body>
+
+</html>

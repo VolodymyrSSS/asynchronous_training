@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous_theory3</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .code-ex {
+        width: 50%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        text-indent: 0;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+      text-indent: 30px;
+    }
+
+    </style>
+</head>
+<body>
+
+  <h2 class="title">Асинхронный код: работа с файлами</h2>
+
+  <p>Еще один способ положить функцию в очередь событий — это выполнить некоторую асинхронную операцию, 
+    в результате которой будет выполнен callback — функция обратного вызова.<br>
+    В качестве асинхронной операции в данном примере мы рассмотрим операции работы с файловой системой. 
+    В следующем примере мы подключаем библиотеку fs, встроенную библиотеку с помощью функции require.
+  </p>
+
+  <p>Для того, чтобы прочитать файл data.json, который лежит в той же директории, что и файл с нашим 
+    исходным кодом, мы воспользуемся переменной __dirname. Далее мы вызываем метод readFileSync, 
+    которому передаем два аргумента: первый аргумент — это имя файла, который мы хотим прочитать, второй 
+    аргумент — это кодировка, в которой нужно прочитать файл. Если не указать кодировку, то в переменной 
+    data окажется буфер с данными. Если же кодировка указана, то в переменной data мы увидим строку. В 
+    нашем случае в файле data.json лежит некая строка в формате JSON: <em>'{"name":"Sergey"}'</em>.
+  </p>
+
+  <p class="code-ex">
+    <code>
+      var fs = require('fs');<br>
+      <br>
+      var fileName = __dirname + '/data.json'<br>
+      <br>
+      var data = fs.readFileSync(fileName, 'utf-8');<br>
+      <br>
+      console.log(data);<br>
+      <br>
+      in console<br>
+      '{"name":"Sergey"}'<br>
+    </code>
+  </p>
+
+  <p>В нашем случае метод readFileSync является синхронным, на это указывает суффикс Sync в его названии. 
+    Во время выполнения синхронной операции интерпретатор не может выполнять никакие другие полезные 
+    задачи, например, обрабатывать системные таймеры или запросы от пользователя.
+  </p>
+
+  <p>Давайте измерим время, как долго выполняется операция readFileSync. Сделаем мы это при помощи 
+    вызова метода console.time, передавая туда первым аргументом некоторый идентификатор. В нашем случае 
+    мы передадим туда строку с названием метода. После этого начинается отсчет времени.<br>
+    Мы выполняем функцию readFileSync и останавливаем отсчет времени при помощи вызова функции 
+    console.timeEnd, передавая туда тот же самый идентификатор. В результате на консоли мы увидим время 
+    чтения файла: три милисекунды. Не так уж и много:
+  </p>
+    
+  <p class="code-ex">
+    <code>
+      var fs = require('fs');<br>
+      <br>
+      var fileName = __dirname + '/data.json'<br>
+      <br>
+      <b>console.time('readFileSync');</b><br>
+      var data = fs.readFileSync(fileName, 'utf-8');<br>
+      <b>console.timeEnd('readFileSync');</b><br>
+      <br>
+      console.log(data);<br>
+      <br>
+      in console<br>
+      readFileSync: 3ms<br>
+      '{"name":"Sergey"}'<br>
+    </code>
+  </p>
+
+  <p>Однако если мы возьмем файл побольше, например, файл bigData.mov и выполним те же самые замеры, 
+    мы увидим, что время файла заняло аж целых три с половиной секунды.
+  </p>
+
+  <p class="code-ex">
+    <code>
+      var fs = require('fs');<br>
+      <br>
+      var fileName = __dirname + <b>'/bigData.mov'</b><br>
+      <br>
+      console.time('readFileSync');<br>
+      var data = fs.readFileSync(fileName, 'utf-8');<br>
+      console.timeEnd('readFileSync');<br>
+      <br>
+      console.log(data);<br>
+      <br>
+      in console<br>
+      readFileSync: 3567ms<br>
+      'много текста'<br>
+    </code>
+  </p>
+    
+  <p>Это огромное время, на протяжении которого интерпретатор ничего не делал. Он просто ждал, пока 
+    операционная система прочитает файл и отдаст команду на продолжение выполнения кода. Если речь идет 
+    о интерфейсе пользователя, то в этот момент пользователь не может взаимодействовать с окном. Он не 
+    может переключать кнопки, радиобаттоны  и т.д. Если на странице есть анимация, то во время выполнения 
+    синхронной операции анимация замирает.
+  </p>
+
+  <p>Для того, чтобы избавиться от этого негативного эффекта, мы можем заменить синхронную функцию 
+    readFileSync на ее асинхронный аналог readFile.<br>
+    Однако если это мы сделаем в лоб, то в переменной data мы увидим undefined. 
+  </p>
+
+  <p class="code-ex">
+    <code>
+      var fs = require('fs');<br>
+      <br>
+      var fileName = __dirname + '/data.json'<br>
+      <br>
+      var data = fs.readFile(fileName, 'utf-8');<br>
+      <br>
+      console.log(data);<br>
+      <br>
+      in console<br>
+      undefined<br>
+    </code>
+  </p>
+
+  <p>В самом деле, запуская readFile, мы всего лишь отдаем инструкцию операционной системе на чтение 
+    файла. Когда чтение файла завершится, будет вызвана функция callback, которая передается третьим 
+    аргументом в функцию readFile. 
+  </p>
+
+  <p class="code-ex">
+    <code>
+      var fs = require('fs');<br>
+      <br>
+      var fileName = __dirname + '/data.json'<br>
+      <br>
+      var data = fs.readFile(fileName, 'utf-8', function(err, data){
+        console.log(data);<br>
+      });<br>
+    </code>
+  </p>
+
+</body>
+
+</html>

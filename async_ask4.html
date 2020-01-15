@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>asynchronous-ask4</title>
+    <style>
+    body {
+        background-color: tan;
+        margin: 0;
+        font-family: Verdana, sans-serif;
+    }
+
+    .title {
+        color: red;
+        text-align: center;
+        font-weight:700;
+    }
+
+    .task{
+        width: 50%;
+        padding: 15px 25px;
+        color: navy;
+        background-color: #e2e2e2;
+        margin: 35px auto;
+    }
+
+    .code-ex {
+        width: 50%;
+        font-family: sans-serif;
+        background-color: #bebebe;
+        font-size: large;
+        padding-left: 15px;
+        margin: 0 auto;
+    }
+
+    p {
+        width: 80%;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+    <h2 class="title">Асинхронный код, задача</h2>
+
+    <h4 class="task">Сколько раз будет вызвана функция func если выполнить<br> setInterval(func, 1000)?</h4>
+
+    <p class="code-ex">
+        <code>
+            function toStove() {<br>
+            return 'Поставить на плиту';<br>
+            }<br>
+            function fromStove() {<br>
+            return 'Снять с плиты';<br>
+            }<br>
+            <br>
+            function toStir() {<br>
+            return 'Помешивать';<br>
+            }<br>
+            <br>
+            toStove();<br>
+            setInterval(toStir, 1000);<br>
+        </code>
+    </p>
+
+    <script>
+      function toStove() {
+        return 'Поставить на плиту';
+      }
+
+      function toStir() {
+        return 'Помешивать';
+      }
+
+      function fromStove() {
+        return 'Снять с плиты';
+      };
+
+      toStove();
+    //   toStir();
+      var id = setInterval(toStir, 1000);
+      clearInterval(id);
+      fromStove();
+      console.log(toStove());
+      console.log(toStir());
+      console.log(id);
+      console.log(fromStove());
+    </script>
+
+
+    
+    <p>
+        Вариант1:<br>
+        <b>ни разу, потому что после вызова setInterval программа завершится.</b><br>
+        Ответ: <b>no</b>: До тех пор, пока интерпретатор знает о системном таймере, выполнение кода не завершится. 
+        Функция func будет вызываться каждые 5 секунд.<br>
+        <br>
+
+        Вариант2:<br>
+        <b>1 раз по прошествии пяти секунд.</b><br>
+        Ответ: <b>no</b>:Функция func будет вызываться каждые 5 секунд, до тех пор, пока системный таймер не остановят.<br>
+        <br>
+
+        Вариант3:<br>
+        <b>Неограниченное число раз, каждые пять секунд.</b><br>
+        Ответ: <b>yes</b>:Функция func будет вызываться до тех пор, пока системный таймер не остановят.<br>
+        <br>
+
+        Вариант4:<br>
+        <b>5000 раз.</b><br>
+        Ответ: <b>no</b>:В объявлении setInterval(func, 5000) вторым параметром указывается интервал, через который нужно 
+        вызывать колбэк. Таким образом, функция func будет вызываться каждые 5 секунд, до тех пор, пока системный таймер 
+        не остановят.<br>
+        <br>
+    </p>
+    
+
+</body>
+
+</html>
