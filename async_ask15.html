@@ -19,7 +19,7 @@
     }
 
     .task{
-        width: 70%;
+        width: 51%;
         padding: 15px 25px;
         color: navy;
         background-color: #e2e2e2;
@@ -43,36 +43,38 @@
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, задача</h2>
 
-    <h4 class="task">Напишите код для двух объектов promise:<br>
-      1. Первый - для успешно выполненного промиса c результатом: 'done!';<br>
-      2. Второй - для промиса в случае ошибки и результатом: 'Error: Whoops!'<br>
-      А какая особенность кода будет если мы заинтересованы только в результате успешного выполнения задачи?
+    <h4 class="task">Напишіть код для двох об'єктів promise:<br>
+      1. Перший - для успішно виконаного промісу з результатом: 'done!';<br>
+      2. Другий - для проміса у випадку помилки з результатом: 'Error: Whoops!'<br>
+      А яка є особливість, якщо ми зацікавлені тільки в успішному виконанні промісу ?<br>
     </h4>
     <br>
 
-    <p><b>Решение:</b></p>
+    <p><b>Рішення:</b></p>
     <br>
 
     <p class="code-ex">
       <code>
+        <br>
         'use strict';<br>
         <br>
-        // создаём 1й промис
+        // створюємо 1й проміс<br>
         let promise1 = new Promise(function(resolve, reject) {<br>
-          // задаём функцию для успешного выполнения промиса
-          setTimeout(() => <b>resolve("done!"), 1000);</b><br>
+        &nbsp;&nbsp;// визначаємо функцію для успішно виконаного проміса (з імітацією очікування відповіді від сервера 1 сек)<br>
+        &nbsp;&nbsp;setTimeout(() => <b>resolve("done!")</b>, 1000);<br>
         });<br>
         <br>
-      // навешиваем метод .then для выполнения функции-исполнения
-      promise.then(<br>
-        // resolve запустит первую функцию, переданную в .then<br>
-        result => console.log(result), // выведет "done!" через одну секунду<br>
-        // этот .then не будет запущен так как промис уже получил статус 'resolve'<br>
-        error => console.log(error)<br>
-      );<br>
-        </code>
+        // застосовуємо метод <i>.then</i> для обробки функції-виконання<br>
+        promise1.then(<br>
+        &nbsp;&nbsp;// <i>resolve</i> запустить першу функцію, передану в <i>.then</i><br>
+        &nbsp;&nbsp;result => console.log(result), // виведе "done!" через одну секунду<br>
+        <br>
+        &nbsp;&nbsp;error => console.log(error) // а ця функція не буде запущена бо проміс вже отримав статус 'resolve'<br>
+        );<br>
+        <br>
+      </code>
     </p>
     <br>
 
@@ -85,27 +87,28 @@
           setTimeout(() => resolve("done!"), 1000);
         });
         
-        // resolve запустит первую функцию, переданную в .then
       promise1.then(
         result => console.log(result), // выведет "done!" через одну секунду
         error => console.log(error) // не будет запущена
       );
     </script>
 
-    <p>В случае ошибки выполнится вторая функция-исполнитель:</p>
+    <p>А у випадку помилки, буде виконана друга функція:</p>
     <br>
 
     <p class="code-ex">
       <code>
-        let promise = new Promise(function(resolve, reject) {<br>
-          setTimeout(() => <b>reject(new Error("Whoops!")), 1000);</b><br>
-        });<br>
-        <br>
-        promise.then(<br>
-          result => console.log(result), // не будет запущена<br>
-          // reject запустит вторую функцию, переданную в .then<br>
-          error => console.log(error) // выведет "Error: Whoops!" спустя одну секунду<br>
-        );<br>
+          <br>
+          let promise2 = new Promise(function(resolve, reject) {<br>
+          &nbsp;&nbsp;&nbsp;setTimeout(() => <b>reject(new Error("Whoops!")), 1000);</b><br>
+          });<br>
+          <br>
+          promise2.then(<br>
+          &nbsp;&nbsp;&nbsp;result => console.log(result), // не буде запущена<br>
+          &nbsp;&nbsp;&nbsp;// reject запустить другу функцію, передану в <i>.then</i><br>
+          &nbsp;&nbsp;&nbsp;error => console.log(error) // виведе "Error: Whoops!" через одну секунду<br>
+          );<br>
+          <br>
         </code>
     </p>
     <br>
@@ -115,31 +118,30 @@
         setTimeout(() => reject(new Error("Whoops!")), 1000);
       });
 
-      // reject запустит вторую функцию, переданную в .then
       promise2.then(
-        result => console.log(result), // не будет запущена
-        error => console.log(error) // выведет "Error: Whoops!" спустя одну секунду
+        result => console.log(result), // не буде запущена
+        error => console.log(error) // виведет "Error: Whoops!" через одну секунду
       );
     </script>
 
-    <p>Конечно, вместо setTimeout внутри функции промиса может быть и запрос к серверу и ожидание 
-      ввода пользователя, или другой асинхронный процесс. Главное, чтобы по своему завершению он 
-      вызвал resolve или reject, которые передадут результат обработчикам.
+    <p>Звичайно, замість setTimeout всередині функції промісу може бути і запит на сервер і очікування 
+      вводу користувачем символів в поле <i>input</i>, чи якийсь інший асинхронний процес. Гловне, щоб
+      по завершенню був викликаний або resolve, або reject, які передадуть результат обробникам.
     </p>
     <br>
 
-    <p>А теперь рассмотрим особенность если мы заинтересованы только в результате успешного выполнения 
-      задачи, а для этого в then можно передать только одну функцию:
+    <p>А тепер розглянемо особливість, якщо ми зацікавлені тільки в успішному виконанні промісу,
+       а для цього, в <i>.then</i> потрібно передавати тільки одну функцію:
     </p>
     <br>
 
     <p class="code-ex">
       <code>
         let promise = new Promise(resolve => {<br>
-          setTimeout(() => resolve("I am always done!"), 2000);<br>
+        &nbsp;&nbsp;&nbsp;setTimeout(() => resolve("I am always done!"), 2000);<br>
         });<br>
         <br>
-        promise.then(alert); // выведет на экране "I am always done!" спустя две секунды<br>
+        promise.then(console.log); // виведе в консоль "I am always done!" через дві секунди<br>
         </code>
     </p>
     <br>
@@ -149,7 +151,7 @@
         setTimeout(() => resolve("I am always done!"), 2000);
       });
 
-      promise3.then(alert); // выведет на экране "I am always done!" спустя две секунды
+      promise3.then(console.log);
     </script>
 
 

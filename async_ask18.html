@@ -4,69 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>asynchronous-ask18</title>
+    <title>asynchronous-selfcheck18</title>
     <style>
     body {
-        background-color: tan;
-        margin: 0;
-        font-family: Verdana, sans-serif;
+      background-color: tan;
+      margin: 0;
+      font-family: Verdana, sans-serif;
     }
 
     .title {
-        color: red;
-        text-align: center;
-        font-weight:700;
+      color: red;
+      text-align: center;
+      font-weight:700;
     }
 
     .task{
-        width: 70%;
-        padding: 15px 25px;
-        color: navy;
-        background-color: #e2e2e2;
-        margin: 35px auto;
+      width: 52%;
+      padding: 15px 25px;
+      color: navy;
+      background-color: #e2e2e2;
+      margin: 35px auto;
     }
 
     .code-ex {
-        width: 60%;
-        font-family: sans-serif;
-        background-color: #bebebe;
-        font-size: large;
-        padding-left: 15px;
-        margin: 0 auto;
+      width: 60%;
+      font-family: sans-serif;
+      background-color: #bebebe;
+      font-size: large;
+      padding-left: 15px;
+      margin: 0 auto;
     }
 
     p {
-        width: 80%;
-        margin: 0 auto;
+      width: 80%;
+      margin: 0 auto;
     }
     </style>
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, самоперевірка</h2>
 
-    <h4 class="task">Посмотрите на код ниже, проанализируйте его.<br>
-      Что будет вызвано раньше и что будет выведено в консоль?<br>
-      А как сделать наоборот, покажите решение.
+    <h4 class="task">Подивіться на код, який приведено нижче, проаналізуйте його.<br>
+      Що буде викликатись раніше та що буде виведено в консолі?<br>
+      А як зробити навпаки, покажіть рішення?
     </h4>
     <br>
 
     <p class="code-ex">
       <code>
+        <br>
         'use strict';<br>
-      <br>
-      let promise = new Promise((resolve, reject) => {<br>
-      <br>
-        setTimeout(() => reject(new Error("error")), 1000);<br>
-        setTimeout(() => resolve("ignored"), 2000);<br>
-      });<br>
-      <br>
-      promise<br>
-        .then(<br>
-          result => console.log("Fulfilled: " + result),<br>
-          error => console.log("Rejected: " + error)<br>
-        );<br>
-        </code>
+        <br>
+        &nbsp;let promise = new Promise((resolve, reject) => {<br>
+        &nbsp;&nbsp;setTimeout(() => reject(new Error("error")), 1000);<br>
+        &nbsp;&nbsp;setTimeout(() => resolve("ignored"), 2000);<br>
+        &nbsp;});<br>
+        <br>
+        &nbsp;promise<br>
+        &nbsp;&nbsp;.then(<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;result => console.log("Fulfilled: " + result),<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;error => console.log("Rejected: " + error)<br>
+        &nbsp;&nbsp;);<br>
+        <br>
+      </code>
     </p>
     <br>
 
@@ -85,45 +86,50 @@
         );
     </script>
 
-    <p><b>Ответ:</b></p>
+    <p><b>Рішення:</b></p>
+    <br>
 
-    <p>Первое что необходимо сказать, после вызова resolve/reject промис уже не может «передумать».<br>
-      Когда промис переходит в состояние «выполнен» – с результатом (resolve) или ошибкой (reject) – 
-      это навсегда.
-    </p>
+    <p>Перше, що необхідно сказати це те, що проміс переходить тільки в один стан - той що визначений в коді першим.
+      У нашому випадку це стан <i>"reject"</i>. Коли проміс перейшов або у стан <i>"виконано"</i> з результатом 
+      <i>"resolve"</i> чи в стан <i>"відхилено"</i> з результатом <i>"reject"</i> то це назавжди.<br>
+      Після виклику <i>"resolve/reject"</i> проміс вже не може <i>"передумати"</i>.<br>
+    </p><br>
     
-    <p>Поэтому, в результате вызова этого кода сработает только первый обработчик then, так как после 
-      вызова reject промис уже получил состояние (с ошибкой), и в дальнейшем его уже ничто не изменит.
-      Последующие вызовы resolve/reject будут просто проигнорированы.
-      Поэтому, через 1 секунду готов результат: error и в консоль первым будет выведен 'Rejected: error'<br>
-      через 2 секунды — resolve с ignored, он будет проигнорирован.
+    <p>А отже, в результаті виклику цього коду спрацює тільки перший обробник <i>"then"</i> бо після
+      виклику <i>"reject"</i> проміс вже отримав стан з помилкою, і в подальшому його вже нічого не змінить.
+      Наступні виклики <i>"resolve/reject"</i> будуть просто ігноруватись.<br>
+      Тому <i>"setTimeout"</i> із затримкою 1 секунду - виконається з результатом: <i>"error"</i> і в консоль 
+      першим буде виведено <i>"Rejected: error"</i><br>
+      А той <i>"setTimeout"</i> із затримкою в 2 секунди, буде проігнорований.
     </p>
 
-    <p>А так – наоборот, 'resolve' будет раньше:</p>
+    <p>А так – навпаки, стан <i>"resolve"</i>' буде першим:</p>
     <br>
 
 
     <p class="code-ex">
       <code>
+        <br>
         'use strict';<br>
         <br>
         let promise = new Promise((resolve, reject) => {<br>
-          // через 1 секунду готов результат: result<br>
-          setTimeout(() => resolve('result'), 1000);<br>
-          // через 2 секунды — reject с ошибкой, он будет проигнорирован<br>
-          setTimeout(() => reject(new Error('ignored')), 2000);<br>
+        <br>
+        &nbsp;setTimeout(() => resolve('result'), 1000); // через 1 секунду буде результат: <i>'result'</i><br>
+        <br>
+        &nbsp;setTimeout(() => reject(new Error('ignored')), 2000); // стан <i>'reject'</i> буде проігнорований<br>
         });<br>
         <br>
-        promise<br>
-          .then(<br>
-            result => console.log("Fulfilled: " + result), // сработает<br>
-            error => console.log("Rejected: " + error) // не сработает<br>
-          );<br>
+        &nbsp;promise<br>
+        &nbsp;&nbsp;.then(<br>
+        &nbsp;&nbsp;&nbsp;result => console.log("Fulfilled: " + result), // обробник спрацює<br>
+        &nbsp;&nbsp;&nbsp;error => console.log("Rejected: " + error) // обробник не буде працювати<br>
+        &nbsp;&nbsp;);<br>
+        <br>
         </code>
     </p>
     <br>
-
-    
-</body>
+    <br>
+    <br>
+  </body>
 
 </html>

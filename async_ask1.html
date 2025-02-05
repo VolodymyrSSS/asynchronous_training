@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>asynchronous-ask1</title>
+    <title>asynchronous-selfcheck1</title>
     <style>
     body {
         background-color: tan;
@@ -43,59 +43,59 @@
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, самоперевірка</h2>
 
-    <h4 class="task">Что будет в стеке вызовов, в момент вызова second()?</h4>
+    <h4 class="task">Що буде в стеку викликів у момент виклику second()?</h4>
 
     <p class="code-ex">
         <code>
             function first() {<br>
-                console.log('first');<br>
+            &nbsp;&nbsp;&nbsp;console.log('first');<br>
             }<br>
             <br>
             function second() {<br>
-                console.log('second');<br>
+            &nbsp;&nbsp;&nbsp;console.log('second');<br>
             }<br>
             <br>
             first();<br>
-            second(); // Что будет в стеке вызовов в этот момент?<br>
+            second(); // Що буде в стеку викликів у цей момент?<br>
             <br>
         </code>
     </p>
 
     <script>
-        function Cat (name) {
-          this.name = null;
-          return {
-            name: name
-          }
+        function first() {
+            console.log('first');
         }
-
-        var barsik = new Cat('Barsik');
-
-        console.log(barsik.name);
+            
+        function second() {
+            console.log('second');
+        }
+        
+        first();
+        second();
     </script>
 
     
     <p>
-        Вариант1:<br>
-        <b>anonymous и first</b><br>
-        Ответ: <b>no</b>: Функция anonymous оказалась в стеке когда код начал исполняться. Функции first не будет в стеке вызовов, потому что её выполнение уже завершено.<br>
+        Варіант1:<br>
+        <b>anonymous та first</b><br>
+        Відповідь: <b>ні</b>: Функція anonymous опинилась в стеку коли код почав виконуватися. Функція first не буде в стеку викликів, тому що її виконання вже завершено.<br>
         <br>
 
-        Вариант2:<br>
-        <b>anonymous и second</b><br>
-        Ответ: <b>yes</b>: Функция anonymous оказалась в стеке когда код начал исполняться. second лежит в стеке вызовов, потому что выполняется в этот момент.<br>
+        Варіант2:<br>
+        <b>anonymous і second</b><br>
+        Відповідь: <b>так</b>: Функція anonymous опинилась в стеку коли код почав виконуватися. second лежить в стеку виконання, тому що вона виконується в цей момент.<br>
         <br>
 
         Вариант3:<br>
-        <b>first и second</b><br>
-        Ответ: <b>no</b>: Функции first не будет в стеке вызовов, потому что её выполнение уже завершено.<br>
+        <b>first та second</b><br>
+        Відповідь: <b>ні</b>: Функція first не буде в стеку викликів, тому що її вкиконання вже завершиться на той час.<br>
         <br>
 
         Вариант4:<br>
-        <b>anonymous, first и second</b><br>
-        Ответ: <b>no</b>: Функции first не будет в стеке вызовов, потому что её выполнение уже завершено.<br>
+        <b>anonymous, first та second</b><br>
+        Відповідь: <b>ні</b>: Функція first не буде в стеку викликів, тому що її вкиконання вже завершено.<br>
         <br>
     </p>
     

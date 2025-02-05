@@ -27,7 +27,7 @@
     }
 
     .code-ex {
-        width: 60%;
+        width: 55%;
         font-family: sans-serif;
         background-color: #bebebe;
         font-size: large;
@@ -43,158 +43,179 @@
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, задача</h2>
 
-    <h4 class="task">Напишите функцию printNumbers(from, to), которая выводит число каждую секунду, 
-        начиная от from и заканчивая to.<br>
-        Сделайте два варианта решения:<br>
-        1. Используя setInterval.<br>
-        2. Используя рекурсивный setTimeout.
+    <h4 class="task">В нас є функція <i>run</i>, яка рекурсивно виводить в консоль
+      масив чисел. В дійсності, кожне число - це різниця між викликами або затримка,
+      яка виводиться в консоль - це також база рекурсії. Виведення в масив цих чисел буде
+      здійснюватись рекурсивно до тих пір, доки різниця не перевищить 100 - це гілка
+      рекурсії.<br>
+      Напишіть функцію printNumbers(from, to), яка виводить число кожну секунду, 
+      починаючи з <i>from</i> і закінчуючи <i>to</i>.<br>
+      Зробіть два варіанти рішення:<br>
+        1. Використовуючи <i>setInterval</i>;<br>
+        2. Використовуючи рекурсивний <i>setTimeout</i>.<br>
     </h4>
     <br>
 
-    <p class="code-ex">
+    <p class="code-ex" style="width: 65%">
+      <br>Вихідні дані:<br>
       <code>
+        <br>
         let start = Date.now();<br>
         let times = [];<br>
         <br>
         setTimeout(function run() {<br>
-        times.push(Date.now() - start);<br>
+        &nbsp;&nbsp;&nbsp;times.push(Date.now() - start);<br>
         <br>
-        if (start + 100 < Date.now()) alert(times);<br>
-        else setTimeout(run);<br>
-        });<br>
+        &nbsp;&nbsp;&nbsp;if (start + 100 < Date.now()) console.log(times);<br>
+        &nbsp;&nbsp;&nbsp;else setTimeout(run);<br>
+        &nbsp;&nbsp;&nbsp;}<br>
+        );<br><br>
+        // у консолі буде виведено масив чисел типу:<br>
+        [4, 4, 4, 4, 14, 19, 23, 32, 37, 41, 51, 56, 64, 73, 80, 89, 97, 104]<br>
+        <br>
       </code>
     </p>
     <br>
 
-    <p><b>Ответ1:</b> Используем <b>setInterval</b>:</p>
+    <script>
+      let start = Date.now();
+      let times = [];
+        
+      setTimeout(function run() {
+        times.push(Date.now() - start);
+        if (start + 100 < Date.now()) console.log(times);
+        else setTimeout(run);
+      });
+    </script>
+
+    <p><b>Рішення1:</b> Використовуючи <i><b>setInterval</b></i>:</p>
     <br>
 
     <p class="code-ex">
       <code>
         function printNumbers(from, to) {<br>
-            let current = from;<br>
+        &nbsp;&nbsp;&nbsp;let current = from; // від якого числа<br>
           
-            let timerId = <b>setInterval</b>(function() {<br>
-              alert(current);<br>
-              if (current == to) {<br>
-                <b>clearInterval</b>(timerId);<br>
-              }<br>
-              current++;<br>
-            }, 1000);<br>
-          }<br>
-          <br>
-        // использование:<br>
-        printNumbers(5, 10);<br>
-        </code>
-    </p>
-    <br>
-
-    <script>
-        function printNumbers(from, to) {
-            let current = from;
-          
-            let timerId = setInterval(function() {
-              console.log(current);
-              if (current == to) {
-                clearInterval(timerId);
-              }
-              current++;
-            }, 1000);
-        }
-
-        // использование:
-        printNumbers(5, 10);
-    </script>
-
-    <p><b>Ответ2:</b> Используем <b>рекурсивный setTimeout</b>:</p>
-    <br>
-
-    <p class="code-ex">
-      <code>
-      function printNumbers(from, to) {<br>
-          let current = from;<br>
-          <br>
-          <b>setTimeout</b>(function go() {<br>
-            alert(current);<br>
-            if (current < to) {<br>
-              <b>setTimeout</b>(go, 1000);<br>
-            }<br>
-            current++;<br>
-          }, 1000);<br>
+        &nbsp;&nbsp;&nbsp;let timerId = <b>setInterval</b>(function() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(current); // виводимо в консоль<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (current == to) { // коли досягне до якого числа<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>clearInterval(timerId);</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}// коли досягне то очищаєм ідентифікатор<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current++; // збільшуємо на одиницю<br>
+        &nbsp;&nbsp;&nbsp;}, 1000); // задаєм інтервал затримки<br>
         }<br>
         <br>
-        // использование:<br>
+        // Перевірка - вивести числа затримки від 5 до 10:<br>
         printNumbers(5, 10);<br>
+        // на окремому рядку 5 6 7 8 9 10<br>
       </code>
     </p>
     <br>
 
     <script>
-        function printNumbers(from, to) {
-          let current = from;
+      // function printNumbers(from, to) {
+      //   let current = from;
+      
+      //   let timerId = setInterval(function() {
+      //     console.log(current);
+      //     if (current == to) {
+      //       clearInterval(timerId);
+      //     }
+      //     current++;
+      //   }, 1000);
+      // }
 
-          setTimeout(function go() {
-            console.log(current);
-            if (current < to) {
-                setTimeout(go, 1000);
-            }
-            current++;
-          }, 1000);
-        }
-
-        // использование:
-        printNumbers(5, 10);
+      // printNumbers(5, 10);
     </script>
 
-    <p>Заметим, что в обоих решениях есть начальная задержка перед первым выводом. Она составляет 
-        одну секунду (1000мс). Если мы хотим, чтобы функция запускалась сразу же, то надо добавить 
-        такой запуск вручную на отдельной строке, вот так:
+    <p><b>Рішення2:</b> Використовуючи <i><b>рекурсивный setTimeout</b></i>:</p>
+    <br>
+
+    <p class="code-ex">
+      <code>
+        function printNumbers(from, to) {<br>
+        &nbsp;&nbsp;&nbsp;let current = from;<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;<b>setTimeout</b>(function go() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;console.log(current);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if (current < to) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>setTimeout</b>(go);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;current++;<br>
+        &nbsp;&nbsp;&nbsp;}, 1000);<br>
+        }<br>
+        <br>
+        // Перевірка - вивести числа затримки від 5 до 10:<br>
+        printNumbers(5, 10);<br>
+        // на окремому рядку 5 6 7 8 9 10<br>
+      </code>
+    </p>
+    <br>
+
+    <script>
+      // function printNumbers1(from, to) {
+      //   let current = from;
+
+      //   setTimeout(function go() {
+      //     console.log(current);
+      //     if (current < to) {
+      //         setTimeout(go);
+      //     }
+      //     current++;
+      //   }, 1000);
+      // }
+
+      // printNumbers1(5, 10);
+    </script>
+
+    <p>Ви помітили, що в обох рішеннях є початкова затримка перед першим викликом? Вона складає 
+        одну секунду (1000мс). І якщо потрібно щоб функція одразу запускалась, то потрібно додати 
+        такий запуск вручну на окремому рядку, ось так:
     </p>
     <br>
     
     <p class="code-ex">
       <code>
         function printNumbers(from, to) {<br>
-            let current = from;<br>
-            <br>
-            function go() {<br>
-                console.log(current);<br>
-              if (current == to) {<br>
-                <b>clearInterval</b>(timerId);<br>
-              }<br>
-              current++;<br>
-            }<br>
-            <br>
-          <b>go();<br>
-          let timerId = setInterval(go, 1000);<br>
+        &nbsp;&nbsp;&nbsp;let current = from;<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;function go() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(current);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (current == to) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>clearInterval</b>(timerId);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current++;<br>
+        &nbsp;&nbsp;&nbsp;}<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;<b>go();<br>
+        &nbsp;&nbsp;&nbsp;let timerId = setInterval(go);<br>
         }</b>
         <br>
-        // использование:<br>
-        printNumbers(5, 10);<br>
+        // Перевірка - вивести числа затримки від 5 до 10:<br>
+        printNumbers(5, 10); // одразу буде викликано функцію go<br>
       </code>
     </p>
     <br>
 
     <script>
-        function printNumbers2(from, to) {
+      function printNumbers2(from, to) {
         let current = from;
 
         function go() {
-            console.log(current);
-            if (current == to) {
+          console.log(current);
+          if (current == to) {
             clearInterval(timerId);
-            }
-            current++;
+          }
+          current++;
         }
 
         go();
-          let timerId = setInterval(go, 1000);
-        }
+        let timerId = setInterval(go);
+      }
 
-        // использование:
-        printNumbers2(5, 10);
+      printNumbers2(5, 10);
     </script>
 
     

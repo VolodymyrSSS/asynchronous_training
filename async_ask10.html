@@ -43,105 +43,100 @@
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, задача</h2>
 
-    <h4 class="task">Для примера1 ниже определите, что будет выведено первым ?
-        Для примера2 определите порядок вывода выражений в консоле. 
+    <h4 class="task">Дайте відповідь:<br>
+        для прикладу1 - що буде виведено першим у консоль ?<br>
+        для прикладу2 - який порядок виводу слів у консоль ?<br>
     </h4>
     <br>
 
-    <p class="code-ex">Пример1<br>
+    <p class="code-ex">Приклад1<br>
         <code>
-            setTimeout(() => console.log("Мир"));<br>
+            setTimeout(() => console.log("це друковане видання"));<br>
             <br>
-            console.log("Привет");<br>
+            console.log("Абабагаламага");<br>
         </code>
     </p>
     <br>
 
-    <p><b>Ответ1:</b> Здесь представлен особый вариант использования: <b>setTimeout(func, 0) или 
-        просто setTimeout(func)</b>.<br>
-        Это планирует вызов func настолько быстро, насколько это возможно. Но планировщик будет 
-        вызывать функцию только после завершения выполнения текущего кода. Так вызов функции будет 
-        запланирован сразу после выполнения текущего кода.<br>
-        Этот код выводит «Привет» и затем сразу «Мир»: Первая строка помещает вызов в «календарь» 
-        через 0 мс.<br>
-        Но планировщик проверит «календарь» только после того, как текущий код завершится. 
-        Поэтому "Привет" выводится первым,<br> а "Мир" – после него.<br>
-    </p>
-
     <script>
-        setTimeout(() => console.log("Мир"));
+        setTimeout(() => console.log("це друковане видання"));
 
-        console.log("Привет");
+        console.log("Абабагаламага");
     </script>
     <br>
 
-    <p class="code-ex">Пример2<br>
+    <p><b>Відповідь1:</b> Першим буде виведено у консоль слово "Абабагаламага" а другим - 
+        вираз "це друковане видання".<br> 
+        Тут гарно продемонстрований варіант використання: <b>setTimeout(func, 0)</b> чи 
+        просто <em>setTimeout(func)</em>. Така функція сплановує виклик func якнайшвидше. Але 
+        планувальник буде викликати функцію <em>func</em> тільки після завершення виконання
+        поточного коду. Це значить, що в стеці викликів, поточним кодом для виконання буде
+        виведення слова "Абабагаламага", яке і буде виведено у консоль першим.<br>
+        Або можна пояснити ще так: перший рядок коду <em>setTimeout</em> кладе виведення в 
+        консолі виразу "це друковане видання" у "календар" через "0" мілісекунд. Проте 
+        планувальник перевірить цей "календар" тільки після того, як виконання поточного коду
+        завершиться, а отже вираз "це друковане видання" буде виведено у консоль тільки другим.
+    </p><br><br>
+
+    <p class="code-ex">Приклад2<br>
         <code>
             (function () {<br>
                 <br>
-                console.log('this is the start');<br>
+                console.log('this is a start');<br>
                 <br>
-                setTimeout(function cb() {<br>
-                  console.log('this is a msg from call back1');<br>
+                setTimeout(function cb1() {<br>
+                  console.log('this is a msg from callback1');<br>
                 });<br>
                 <br>
                 console.log('this is just a message');<br>
                 <br>
-                setTimeout(function cb1() {<br>
-                  console.log('this is a msg from call back2');<br>
+                setTimeout(function cb2() {<br>
+                  console.log('this is a msg from callback2');<br>
                 }, 0);<br>
                 <br>
-                console.log('this is the end');<br>
+                console.log('this is a finish');<br>
                 <br>
             })();<br>
         </code>
     </p>
     <br>
 
-    <p><b>Ответ2:</b> Нулевая задержка не дает гарантии, что обработчик выполнится через ноль миллисекунд. 
-        Вызов setTimeout с аргументом  0 (ноль) не завершится за указанное время. Выполнение зависит 
-        от количества ожидающих задач в очереди. Например, сообщение ''this is just a message'' из 
-        примера2 будет выведено на консоль раньше, чем произойдет выполнение обработчика сb1. 
-        Это произойдет, потому что задержка – это минимальное время, которое требуется среде выполнения 
-        на обработку запроса.
-    </p>
+    <p><b>Відповідь2:</b> Нулева затримка не дає гарантії, що обробник подій виконається через ноль мілісекунд. 
+        Виклик <em>setTimeout</em> із аргументом  "0" (нуль) не завершиться за вказаний час. Виконання залежить 
+        від кількості задач, які очікують для виконання в черзі, якщо більш точніше - в стеку макрозадач.
+        Наприклад, вираз 'this is just a message' буде виведено в консоль рініше ніж відбудеться виконання
+        обробником функції сb1. Це станеться тому, що затримка в нуль мілісекунд у сb1 - це мінімальний час,
+        який потрібно для середовища виконання на обробку запиту. Тому порядок виведення буде такий:<br><br>
+        <em>першим - 'this is the start'<br>
+        другим - 'this is just a message'<br>
+        третім - 'this is finish'<br>
+        четвертим - 'this is a msg from callback1'<br>
+        п'ятим - 'this is a msg from callback2'<br></em>
+    </p><br>
     <br>
 
     <script>
         (function () {
 
-        console.log('this is the start');
+        console.log('this is a start');
 
-        setTimeout(function cb() {
-        console.log('this is a msg from call back1');
+        setTimeout(function cb1() {
+            console.log('this is a msg from callback1');
         });
 
         console.log('this is just a message');
 
-        setTimeout(function cb1() {
-        console.log('this is a msg from call back2');
+        setTimeout(function cb2() {
+            console.log('this is a msg from callback2');
         }, 0);
 
-        console.log('this is the end');
+        console.log('this is finish');
 
         })();
 
     </script>
-
-<p class="code-ex">Очерёдность вывода из Примера2:<br>
-    <code>
-        // "this is the start"<br>
-        // "this is just a message"<br>
-        // "this is the end"<br>
-        // "this is a msg from call back"<br>
-        // "this is a msg from call back1"<br>
-    </code>
-</p>
-
-
-
     
 </body>
 

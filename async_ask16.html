@@ -19,7 +19,7 @@
     }
 
     .task{
-        width: 70%;
+        width: 40%;
         padding: 15px 25px;
         color: navy;
         background-color: #e2e2e2;
@@ -27,7 +27,7 @@
     }
 
     .code-ex {
-        width: 60%;
+        width: 50%;
         font-family: sans-serif;
         background-color: #bebebe;
         font-size: large;
@@ -43,35 +43,37 @@
 </head>
 <body>
 
-    <h2 class="title">Асинхронный код, задача</h2>
+    <h2 class="title">Асинхронний код, задача</h2>
 
-    <h4 class="task">Встроенная функция setTimeout использует колбэк-функции. Создайте альтернативу, 
-      использующую промисы. Работайте с кодом ниже.
+    <h4 class="task">Вбудована функція <i>setTimeout</i> використовує колбек-функцію.<br>
+      Створіть альтернативу, яка використовує проміс.<br>
     </h4>
     <br>
 
     <p class="code-ex">
       <code>
+        <br>
         function delay(ms) {<br>
-          // ваш код<br>
+        &nbsp;&nbsp;&nbsp;// ваш код<br>
         }<br>
         <br>
-        delay(3000).then(() => console.log('выполнилось через 3 секунды'));<br>
-        </code>
+        delay(3000).then(() => console.log('виконалось через 3 секунди'));<br>
+        <br>
+      </code>
     </p>
     <br>
 
-    <p><b>Решение:</b></p>
+    <p><b>Рішення:</b></p>
     <br>
 
     <p class="code-ex">
       <code>
         function delay(ms) {<br>
-          return new Promise(resolve => setTimeout(resolve, ms));<br>
+        &nbsp;&nbsp;&nbsp;<b>return new Promise(resolve => setTimeout(resolve, ms))</b>;<br>
         }<br>
         <br>
-        delay(3000).then(() => console.log('выполнилось через 3 секунды'));<br>
-        </code>
+        delay(3000).then(() => console.log('виконалось через 3 секунди'));<br>
+      </code>
     </p>
     <br>
 
@@ -80,11 +82,11 @@
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      delay(3000).then(() => console.log('выполнилось через 3 секунды'));
+      delay(3000).then(() => console.log('виконалось через 3 секунди'));
     </script>
 
-  <p>Заметьте, что resolve вызывается без аргументов. Мы не возвращаем из delay ничего, просто 
-    гарантируем задержку.
+  <p>Зауважте, що resolve викликається без аргументів. Ми не повертаєм з delay нічого, просто 
+    гарантуємо затримку.
   </p>
 
 </body>
